@@ -1,0 +1,95 @@
+# Run this to generate
+# dot -Tpng -Gsize=9,15\! -Gdpi=100 delta_demo_series1.dot >6.png
+
+##############
+# Our Databricks Color Pallette
+##############
+// Color Palette
+        // "#1B3139" = Dark Navy
+        // "#FF3621" = Innovation Orange
+        // "#1C4856" = Deep Blue
+        // "#00B379" =  Jade
+        // "#FFAB00" = GoldenRod
+        // "#98102A" = Maroon
+        // style = filled = full box color fill
+        // node [style =filled]; Border color
+
+#########
+# Main Graph with 3 subgraphs
+# Delta Log
+# Parquet
+# Notes (ranks sink)
+#########
+
+digraph {
+	rankdir="TB"; # TB or LR
+	splines=line; # No Curves Allowed
+
+	############
+	# Delta Log SubGraph
+	# Most nodes gets weighted left
+	# Added nodes for weight
+	# Hidden nodes for alignment 01,02,03,etc
+	##############
+    	subgraph cluster_0 {
+        	 label="Delta Log";
+		 rank="same";
+        	 edge[style="invisible",dir="none"];
+		 node [ shape=square, style=filled, color = "#98102A", fillcolor = "#FFAB00"]
+        	 "Version 1";
+        	 # Invis nodes to weight graph to left
+		 "Version 2" ;
+		 "Version 3" [style = invis];
+		 "Version 1" -> "Version 2";
+		 "Version 2" -> "Version 3";
+		
+ 
+	}
+
+	#####
+	# Parquet Files Subgraph
+	#
+	#####
+	
+    	subgraph cluster_1 {
+	node [ shape=square, style=filled, color = "#98102A", fillcolor = "#FFAB00"]
+	label="Parquet Files";
+	rank="same";
+        edge[style="invisible",dir="none"];
+        "1.parquet" ; 
+	"2.parquet" ; 
+	#"3.parquet" [ style = invis ] ;
+ 	#"4.parquet" [ style = invis ];
+	"1.parquet" -> "2.parquet" [style = invis];
+	#"2.parquet" -> "3.parquet";
+	#"3.parquet" -> "4.parquet";
+	
+    }
+    
+    ####
+    # Annotation Subgraph
+    ####
+    {
+        rank=sink
+        bottomlabel [
+          shape=plain
+          #label = "1 = Append\n2 = append\n3 = update "
+          label = "1 = Append\n2 = Append"
+	  fontname=calibri
+          fontsize=18
+        ]
+    }
+
+    #########
+    # The Connections
+    ########
+	
+	"Version 1" -> "1.parquet";
+        "Version 2" -> "1.parquet";
+	"Version 2" -> "2.parquet";       
+}
+
+
+
+ 
+
