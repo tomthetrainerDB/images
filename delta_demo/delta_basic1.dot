@@ -1,0 +1,27 @@
+ graph {
+label="Delta Directory Structure\n";
+labelloc=t;
+# Run this to generate
+# dot -Tpng -Gsize=9,15\! -Gdpi=100 delta_basic1.dot >1.png
+// Color Palette
+        // "#1B3139" = Dark Navy
+        // "#FF3621" = Innovation Orange
+        // "#1C4856" = Deep Blue
+        // "#00B379" =  Jade
+        // "#FFAB00" = GoldenRod
+        // "#98102A" = Maroon
+        // style = filled = full box color fill
+        // node [style =filled]; Border color
+	
+	# define the nodes
+  	"Delta \n Directory" [shape=folder, style=filled,color = "#98102A", fillcolor = "#FFAB00"] ;
+  	"/_delta_log" [shape=folder, style=filled,color = "#98102A", fillcolor = "#FFAB00"];
+  "1.parquet\n2.parquet\n3.parquet\n...parquet" [shape=square, style=filled,color = "#98102A", fillcolor = "#FFAB00"];
+
+# define the connections
+
+  "Delta \n Directory" -- "/_delta_log";
+  "Delta \n Directory" -- "1.parquet\n2.parquet\n3.parquet\n...parquet"
+
+
+ }
