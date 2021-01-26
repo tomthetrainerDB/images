@@ -1,0 +1,89 @@
+# Run this to generate
+# dot -Tpng -Gsize=9,15\! -Gdpi=100 delta_basic1.dot >1.png
+// Color Palette
+        // "#1B3139" = Dark Navy
+        // "#FF3621" = Innovation Orange
+        // "#1C4856" = Deep Blue
+        // "#00B379" =  Jade
+        // "#FFAB00" = GoldenRod
+        // "#98102A" = Maroon
+        // style = filled = full box color fill
+        // node [style =filled]; Border color
+
+#########
+# Main Graph with 3 subgraphs
+# Delta Log
+# Parquet
+# Notes (ranks sink)
+#########
+
+digraph {
+	rankdir="TB"; # TB or LR
+	splines=line; # No Curves Allowed
+
+	############
+	# Delta Log SubGraph
+	# Most nodes gets weighted left
+	# Added nodes for weight
+	# Hidden nodes for alignment 01,02,03,etc
+	##############
+    	subgraph cluster_0 {
+        	 label="Delta Log";
+		 rank="same";
+        	 edge[style="invisible",dir="none"];
+		 node [ shape=square, style=filled, color = "#98102A", fillcolor = "#FFAB00"]
+        	 "Version 1" -> "Version 2";
+        	 "Version 2" -> "Version 3";
+		 "Version 3" -> "Version 4";
+		 "Version 4"-> "Version 5";
+ 
+	}
+
+	#####
+	# Parquet Files Subgraph
+	#
+	#####
+	
+    	subgraph cluster_1 {
+	node [ shape=square, style=filled, color = "#98102A", fillcolor = "#FFAB00"]
+	label="Parquet Files";
+	rank="same";
+        edge[style="invisible",dir="none"];
+        "1.parquet" -> "2.parquet" ; 
+	"2.parquet" -> "3.parquet" ;
+ 	"3.parquet" -> "4.parquet" ;
+	
+	
+    }
+    
+    ####
+    # Annotation Subgraph
+    ####
+    {
+        rank=sink
+        bottomlabel [
+          shape=plain
+          label = "1 = Append\n2 = append\n3 = update "
+          fontname=calibri
+          fontsize=18
+        ]
+    }
+
+    #########
+    # The Connections
+    ########
+	
+	"Version 1" -> "1.parquet";
+        "Version 2" -> "1.parquet";
+        "Version 2" -> "2.parquet";
+        "Version 3" ->  "3.parquet"
+        "Version 3" ->  "4.parquet"
+	
+	
+
+}
+
+
+
+ 
+
